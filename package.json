@@ -8,6 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:types": "tsc --noEmit",
     "pod-install": "RCT_NEW_ARCH_ENABLED=1 bundle exec pod install",
     "prepare": "husky install"
   },
