@@ -22,11 +22,12 @@ import {
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {BlinkingAnimated} from './Blinking/BlinkingAnimated';
 import {DragAndDropAnimated} from './DragAndDrop/DragAndDropAnimated';
+import {SwipeAnimated} from './Swipe/SwipeAnimated';
 
 const animations = [
   {label: 'Blinking', component: <BlinkingAnimated />},
   {label: 'Drag and Drop', component: <DragAndDropAnimated />},
-  {label: 'Swipe', component: null},
+  {label: 'Swipe', component: <SwipeAnimated />},
 ];
 
 const App = () => {
