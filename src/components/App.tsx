@@ -14,6 +14,7 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar,
+  StyleSheet,
   Text,
   useColorScheme,
   View,
@@ -25,14 +26,15 @@ import {DragAndDropAnimated} from './DragAndDrop/DragAndDropAnimated';
 import {SwipeAnimated} from './Swipe/SwipeAnimated';
 
 const animations = [
-  {label: 'Blinking', component: <BlinkingAnimated />},
-  {label: 'Drag and Drop', component: <DragAndDropAnimated />},
-  {label: 'Swipe', component: <SwipeAnimated />},
+  {label: 'Blinking', animated: <BlinkingAnimated />, reanimated: null},
+  {label: 'Drag and Drop', animated: <DragAndDropAnimated />, reanimated: null},
+  {label: 'Swipe', animated: <SwipeAnimated />, reanimated: null},
 ];
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const [currentAnimation, setCurrentAnimation] = useState(0);
+  const [isAnimated, setIsAnimated] = useState(true);
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -41,20 +43,16 @@ const App = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{...backgroundStyle, flex: 1}}>
+    <SafeAreaView style={[backgroundStyle, styles.wrapper]}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView horizontal style={{backgroundColor: '#ddd', flexGrow: 0}}>
+      <ScrollView horizontal style={styles.menuWrapper}>
         {animations.map(({label}, index) => (
           <Pressable
             key={index}
-            style={{
-              paddingVertical: 5,
-              paddingHorizontal: 10,
-              margin: 5,
-            }}
+            style={styles.button}
             accessibilityRole="button"
             onPress={() => handleChangeAnimation(index)}>
             <Text
@@ -66,9 +64,59 @@ const App = () => {
           </Pressable>
         ))}
       </ScrollView>
-      <View style={{flex: 1}}>{animations[currentAnimation].component}</View>
+      <View style={styles.typeWrapper}>
+        <Pressable
+          accessibilityRole="button"
+          style={[styles.button, styles.fullWidthButton]}
+          onPress={() => setIsAnimated(true)}>
+          <Text
+            style={{
+              color: isAnimated ? '#1ce1ce' : '#333',
+            }}>
+            Animated
+          </Text>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          style={[styles.button, styles.fullWidthButton]}
+          onPress={() => setIsAnimated(false)}>
+          <Text
+            style={{
+              color: !isAnimated ? '#1ce1ce' : '#333',
+            }}>
+            Reanimated
+          </Text>
+        </Pressable>
+      </View>
+      <View style={styles.wrapper}>
+        {animations[currentAnimation][isAnimated ? 'animated' : 'reanimated']}
+      </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    margin: 5,
+    textAlign: 'center',
+  },
+  fullWidthButton: {
+    flexGrow: 1,
+    alignItems: 'center',
+  },
+  menuWrapper: {backgroundColor: '#ddd', flexGrow: 0},
+  typeWrapper: {
+    flexGrow: 0,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderStyle: 'solid',
+    flexDirection: 'row',
+  },
+});
 
 export default App;
