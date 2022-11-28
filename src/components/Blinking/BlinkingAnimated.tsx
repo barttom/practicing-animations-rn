@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {useState} from 'react';
-import {View, Button, Animated} from 'react-native';
+import {View, Button, Animated, StyleSheet} from 'react-native';
 
 const ANIMATION_TIME = 1000;
 
@@ -33,17 +33,8 @@ export const BlinkingAnimated = () => {
   }, [isBlinking]);
 
   return (
-    <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-      <Animated.View
-        style={{
-          width: 200,
-          height: 200,
-          backgroundColor: '#bada55',
-          marginBottom: 20,
-          opacity: opacity,
-          borderRadius: 200,
-        }}
-      />
+    <View style={styles.wrapper}>
+      <Animated.View style={[styles.circle, {opacity}]} />
       <Button
         title={isBlinking ? 'Stop' : 'Start'}
         onPress={() => setIsBlinking(!isBlinking)}
@@ -51,3 +42,14 @@ export const BlinkingAnimated = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {alignItems: 'center', justifyContent: 'center', flex: 1},
+  circle: {
+    width: 200,
+    height: 200,
+    backgroundColor: '#bada55',
+    marginBottom: 20,
+    borderRadius: 200,
+  },
+});

@@ -38,17 +38,15 @@ export const SwipeAnimated = () => {
             {useNativeDriver: false},
           )}
           scrollEventThrottle={1}>
-          {images.map((image, imageIndex) => {
-            return (
-              <View style={{width: windowWidth, height: 280}} key={imageIndex}>
-                <ImageBackground source={{uri: image}} style={styles.card} />
-              </View>
-            );
-          })}
+          {images.map((image, imageIndex) => (
+            <View style={{width: windowWidth, height: 280}} key={imageIndex}>
+              <ImageBackground source={{uri: image}} style={styles.card} />
+            </View>
+          ))}
         </ScrollView>
         <View style={styles.indicatorContainer}>
           {images.map((image, imageIndex) => {
-            const width = scrollX.interpolate({
+            const size = scrollX.interpolate({
               inputRange: [
                 windowWidth * (imageIndex - 1),
                 windowWidth * imageIndex,
@@ -61,7 +59,7 @@ export const SwipeAnimated = () => {
             return (
               <Animated.View
                 key={imageIndex}
-                style={[styles.indicator, {width}]}
+                style={[styles.indicator, {width: size, height: size}]}
               />
             );
           })}
@@ -94,7 +92,7 @@ const styles = StyleSheet.create({
   indicator: {
     height: 8,
     width: 8,
-    borderRadius: 4,
+    borderRadius: 8,
     backgroundColor: 'silver',
     marginHorizontal: 4,
   },

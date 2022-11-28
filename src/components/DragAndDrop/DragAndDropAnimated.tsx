@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Animated, PanResponder, View} from 'react-native';
+import {Animated, PanResponder, StyleSheet, View} from 'react-native';
 
 export const DragAndDropAnimated = () => {
   const position = useRef(new Animated.ValueXY()).current;
@@ -9,7 +9,7 @@ export const DragAndDropAnimated = () => {
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: Animated.event(
         [null, {dx: position.x, dy: position.y}],
-        {useNativeDriver: true},
+        {useNativeDriver: false},
       ),
       onPanResponderRelease: (_, gestureState) => {
         offset.current.x = offset.current.x + gestureState.dx;
@@ -24,25 +24,27 @@ export const DragAndDropAnimated = () => {
   ).current;
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
+    <View style={styles.wrapper}>
       <Animated.View
         style={{
           transform: [{translateX: position.x}, {translateY: position.y}],
         }}
         {...panResponder.panHandlers}>
-        <View
-          style={{
-            width: 100,
-            height: 100,
-            backgroundColor: '#b00b00',
-          }}
-        />
+        <View style={styles.square} />
       </Animated.View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  square: {
+    width: 100,
+    height: 100,
+    backgroundColor: '#b00b00',
+  },
+});

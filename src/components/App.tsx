@@ -14,6 +14,7 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar,
+  StyleSheet,
   Text,
   useColorScheme,
   View,
@@ -41,20 +42,16 @@ const App = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{...backgroundStyle, flex: 1}}>
+    <SafeAreaView style={[backgroundStyle, styles.wrapper]}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView horizontal style={{backgroundColor: '#ddd', flexGrow: 0}}>
+      <ScrollView horizontal style={styles.menuWrapper}>
         {animations.map(({label}, index) => (
           <Pressable
             key={index}
-            style={{
-              paddingVertical: 5,
-              paddingHorizontal: 10,
-              margin: 5,
-            }}
+            style={styles.button}
             accessibilityRole="button"
             onPress={() => handleChangeAnimation(index)}>
             <Text
@@ -66,9 +63,23 @@ const App = () => {
           </Pressable>
         ))}
       </ScrollView>
-      <View style={{flex: 1}}>{animations[currentAnimation].component}</View>
+      <View style={styles.wrapper}>
+        {animations[currentAnimation].component}
+      </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    margin: 5,
+  },
+  menuWrapper: {backgroundColor: '#ddd', flexGrow: 0},
+});
 
 export default App;
