@@ -21,12 +21,16 @@ import {
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {BlinkingAnimated} from './Blinking/BlinkingAnimated';
+import {BlinkingAnimated, BlinkingReanimated} from './Blinking';
 import {DragAndDropAnimated} from './DragAndDrop/DragAndDropAnimated';
 import {SwipeAnimated} from './Swipe/SwipeAnimated';
 
 const animations = [
-  {label: 'Blinking', animated: <BlinkingAnimated />, reanimated: null},
+  {
+    label: 'Blinking',
+    animated: <BlinkingAnimated />,
+    reanimated: <BlinkingReanimated />,
+  },
   {label: 'Drag and Drop', animated: <DragAndDropAnimated />, reanimated: null},
   {label: 'Swipe', animated: <SwipeAnimated />, reanimated: null},
 ];
