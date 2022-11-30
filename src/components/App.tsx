@@ -21,8 +21,9 @@ import {
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {BlinkingAnimated, BlinkingReanimated} from './Blinking';
-import {DragAndDropAnimated} from './DragAndDrop/DragAndDropAnimated';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {BlinkingAnimated, BlinkingReanimated} from './Blinking/';
+import {DragAndDropAnimated, DragAndDropReanimated} from './DragAndDrop/';
 import {SwipeAnimated} from './Swipe/SwipeAnimated';
 
 const animations = [
@@ -31,7 +32,11 @@ const animations = [
     animated: <BlinkingAnimated />,
     reanimated: <BlinkingReanimated />,
   },
-  {label: 'Drag and Drop', animated: <DragAndDropAnimated />, reanimated: null},
+  {
+    label: 'Drag and Drop',
+    animated: <DragAndDropAnimated />,
+    reanimated: <DragAndDropReanimated />,
+  },
   {label: 'Swipe', animated: <SwipeAnimated />, reanimated: null},
 ];
 
@@ -48,53 +53,55 @@ const App = () => {
 
   return (
     <SafeAreaView style={[backgroundStyle, styles.wrapper]}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView horizontal style={styles.menuWrapper}>
-        {animations.map(({label}, index) => (
+      <GestureHandlerRootView style={styles.wrapper}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        <ScrollView horizontal style={styles.menuWrapper}>
+          {animations.map(({label}, index) => (
+            <Pressable
+              key={index}
+              style={styles.button}
+              accessibilityRole="button"
+              onPress={() => handleChangeAnimation(index)}>
+              <Text
+                style={{
+                  color: currentAnimation === index ? '#1ce1ce' : '#333',
+                }}>
+                {label}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
+        <View style={styles.typeWrapper}>
           <Pressable
-            key={index}
-            style={styles.button}
             accessibilityRole="button"
-            onPress={() => handleChangeAnimation(index)}>
+            style={[styles.button, styles.fullWidthButton]}
+            onPress={() => setIsAnimated(true)}>
             <Text
               style={{
-                color: currentAnimation === index ? '#1ce1ce' : '#333',
+                color: isAnimated ? '#1ce1ce' : '#333',
               }}>
-              {label}
+              Animated
             </Text>
           </Pressable>
-        ))}
-      </ScrollView>
-      <View style={styles.typeWrapper}>
-        <Pressable
-          accessibilityRole="button"
-          style={[styles.button, styles.fullWidthButton]}
-          onPress={() => setIsAnimated(true)}>
-          <Text
-            style={{
-              color: isAnimated ? '#1ce1ce' : '#333',
-            }}>
-            Animated
-          </Text>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          style={[styles.button, styles.fullWidthButton]}
-          onPress={() => setIsAnimated(false)}>
-          <Text
-            style={{
-              color: !isAnimated ? '#1ce1ce' : '#333',
-            }}>
-            Reanimated
-          </Text>
-        </Pressable>
-      </View>
-      <View style={styles.wrapper}>
-        {animations[currentAnimation][isAnimated ? 'animated' : 'reanimated']}
-      </View>
+          <Pressable
+            accessibilityRole="button"
+            style={[styles.button, styles.fullWidthButton]}
+            onPress={() => setIsAnimated(false)}>
+            <Text
+              style={{
+                color: !isAnimated ? '#1ce1ce' : '#333',
+              }}>
+              Reanimated
+            </Text>
+          </Pressable>
+        </View>
+        <View style={styles.wrapper}>
+          {animations[currentAnimation][isAnimated ? 'animated' : 'reanimated']}
+        </View>
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
 };
