@@ -24,7 +24,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {BlinkingAnimated, BlinkingReanimated} from './Blinking/';
 import {DragAndDropAnimated, DragAndDropReanimated} from './DragAndDrop/';
-import {SwipeAnimated} from './Swipe/SwipeAnimated';
+import {SwipeAnimated, SwipeReanimated} from './Swipe/';
 
 const animations = [
   {
@@ -37,7 +37,11 @@ const animations = [
     animated: <DragAndDropAnimated />,
     reanimated: <DragAndDropReanimated />,
   },
-  {label: 'Swipe', animated: <SwipeAnimated />, reanimated: null},
+  {
+    label: 'Swipe',
+    animated: <SwipeAnimated />,
+    reanimated: <SwipeReanimated />,
+  },
 ];
 
 const App = () => {
