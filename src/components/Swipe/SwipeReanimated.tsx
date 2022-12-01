@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import Animated, {
-  Extrapolation,
+  Extrapolate,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -19,7 +19,6 @@ const images = [
   'https://images.pexels.com/photos/7671976/pexels-photo-7671976.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
 ];
 
-// don't know how to create dynamically animated styles. Can't use hook as a call back obviously
 export const SwipeReanimated = () => {
   const scrollX = useSharedValue(0);
   const {width: windowWidth} = useWindowDimensions();
@@ -29,73 +28,6 @@ export const SwipeReanimated = () => {
       scrollX.value = event.contentOffset.x;
     },
   });
-
-  const animatedStyles1 = useAnimatedStyle(() => {
-    const imageIndex = 0;
-    const size = interpolate(
-      scrollX.value,
-      [
-        windowWidth * (imageIndex - 1),
-        windowWidth * imageIndex,
-        windowWidth * (imageIndex + 1),
-      ],
-      [8, 16, 8],
-      {
-        extrapolateLeft: Extrapolation.CLAMP,
-        extrapolateRight: Extrapolation.CLAMP,
-      },
-    );
-
-    return {
-      width: size,
-      height: size,
-    };
-  });
-
-  const animatedStyles2 = useAnimatedStyle(() => {
-    const imageIndex = 1;
-    const size = interpolate(
-      scrollX.value,
-      [
-        windowWidth * (imageIndex - 1),
-        windowWidth * imageIndex,
-        windowWidth * (imageIndex + 1),
-      ],
-      [8, 16, 8],
-      {
-        extrapolateLeft: Extrapolation.CLAMP,
-        extrapolateRight: Extrapolation.CLAMP,
-      },
-    );
-
-    return {
-      width: size,
-      height: size,
-    };
-  });
-
-  const animatedStyles3 = useAnimatedStyle(() => {
-    const imageIndex = 2;
-    const size = interpolate(
-      scrollX.value,
-      [
-        windowWidth * (imageIndex - 1),
-        windowWidth * imageIndex,
-        windowWidth * (imageIndex + 1),
-      ],
-      [8, 16, 8],
-      {
-        extrapolateLeft: Extrapolation.CLAMP,
-        extrapolateRight: Extrapolation.CLAMP,
-      },
-    );
-
-    return {
-      width: size,
-      height: size,
-    };
-  });
-  const animatedStyles = [animatedStyles1, animatedStyles2, animatedStyles3];
 
   return (
     <View style={styles.wrapper}>
@@ -115,9 +47,11 @@ export const SwipeReanimated = () => {
         <View style={styles.indicatorContainer}>
           {images.map((_, imageIndex) => {
             return (
-              <Animated.View
+              <Pointer
                 key={imageIndex}
-                style={[styles.indicator, animatedStyles[imageIndex]]}
+                index={imageIndex}
+                width={windowWidth}
+                sharedValue={scrollX}
               />
             );
           })}
@@ -125,6 +59,32 @@ export const SwipeReanimated = () => {
       </View>
     </View>
   );
+};
+
+const Pointer = ({
+  index,
+  width,
+  sharedValue,
+}: {
+  index: number;
+  width: number;
+  sharedValue: Animated.SharedValue<number>;
+}) => {
+  const animatedStyles = useAnimatedStyle(() => {
+    const size = interpolate(
+      sharedValue.value,
+      [width * (index - 1), width * index, width * (index + 1)],
+      [8, 16, 8],
+      Extrapolate.CLAMP,
+    );
+
+    return {
+      width: size,
+      height: size,
+    };
+  });
+
+  return <Animated.View style={[styles.indicator, animatedStyles]} />;
 };
 
 const styles = StyleSheet.create({
